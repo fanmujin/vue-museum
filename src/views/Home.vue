@@ -75,7 +75,7 @@
 	export default {
 		data() {
 			return {
-				sysName:'VUEADMIN',
+				sysName:'MUSEUM',
 				collapsed:false,
 				sysUserName: '',
 				sysUserAvatar: '',
@@ -140,7 +140,6 @@
 
 <style scoped lang="scss">
 	@import '~scss_vars';
-	
 	.container {
 		position: absolute;
 		top: 0px;
