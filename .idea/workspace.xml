@@ -1,24 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="73808877-f039-487e-ab48-78bdb2fe1234" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/views/charts/address-chart.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/charts/address.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/charts/tendency.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/nav1/Culture.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/nav1/Display.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/nav2/Page6.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/nav3/Page7.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/nav1/Form.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/nav1/Form.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/nav1/Table.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/nav1/Admin.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/nav2/Page4.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/nav2/Page4.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/nav2/Page5.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/nav2/Page5.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/nav3/Page6.vue" beforeDir="false" />
-    </list>
+    <list default="true" id="73808877-f039-487e-ab48-78bdb2fe1234" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,7 +156,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557117979615" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557117997285" />
     <property name="last_opened_file_path" value="$USER_HOME$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -218,7 +201,7 @@
       <workItem from="1556967761043" duration="6515000" />
       <workItem from="1557016855474" duration="26875000" />
       <workItem from="1557067689063" duration="2257000" />
-      <workItem from="1557102721014" duration="8545000" />
+      <workItem from="1557102721014" duration="9194000" />
     </task>
     <task id="LOCAL-00001" summary="改变了端口配置">
       <created>1557019567312</created>
@@ -259,11 +242,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44192000" />
+    <option name="totallyTimeSpent" value="44841000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1603631" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -282,7 +264,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4977307" weight="0.7245902" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49921507" weight="0.38688526" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49921507" visible="true" weight="0.38688526" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50226927" side_tool="true" weight="0.29180327" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
