@@ -51,17 +51,30 @@
             this.logining = true;
             //NProgress.start();
             var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
-            requestLogin(loginParams).then(data => {
+           // requestLogin(loginParams).then(data => {
+            this.$axios({
+              method: "post",
+              url:"http://localhost:8080/Manager/doLogin",
+              params:{
+                   name:loginParams.username,
+                   password:loginParams.password
+              }
+              // data:{
+              //   name: loginParams.username,
+              //   password: loginParams.password
+              // }
+            }).then(res =>{
               this.logining = false;
               //NProgress.done();
-              let { msg, code, user } = data;
-              if (code !== 200) {
+              let { msg, code, data } = res.data;
+              if (code != "1") {
                 this.$message({
                   message: msg,
                   type: 'error'
                 });
               } else {
-                sessionStorage.setItem('user', JSON.stringify(user));
+                console.log(data.name);
+                sessionStorage.setItem('user', JSON.stringify(data.name));
                 this.$router.push({ path: '/main' });
               }
             });
