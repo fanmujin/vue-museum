@@ -33,6 +33,18 @@ module.exports = {
     // (https://github.com/webpack/css-loader#sourcemaps)
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
-    cssSourceMap: false
+    cssSourceMap: false,
+    //代理配置表，在这里可以配置特定的请求代理到对应的api接口
+    //例如将localhost：8080/api/xxx'代理到“www.example.com/api/xxx”
+    //使用方法：http://vuejs-templates.github.io/webpack/proxy.html
+    proxyTable: {
+      '/api': {
+        target: 'http://localhost:8080',//接口的域名
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    },
   }
 }

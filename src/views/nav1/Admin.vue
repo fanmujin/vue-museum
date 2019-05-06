@@ -14,14 +14,13 @@
 				</el-form-item>
 			</el-form>
 		</el-col>
-
 		<!--列表-->
 		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
 			<el-table-column type="index" width="60">
 			</el-table-column>
-			<el-table-column prop="name" label="姓名" width="120" sortable>
+			<el-table-column prop="adminName" label="姓名" width="120" sortable>
 			</el-table-column>
 			<el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
 			</el-table-column>
@@ -167,18 +166,31 @@
 			},
 			//获取用户列表
 			getUsers() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-					//NProgress.done();
-				});
+				// let para = {
+				// 	page: this.page,
+				// 	name: this.filters.name
+				// };
+				// this.listLoading = true;
+				// //NProgress.start();
+				// getUserListPage(para).then((res) => {
+				// 	this.total = res.data.total;
+				// 	this.users = res.data.users;
+				// 	this.listLoading = false;
+				// 	//NProgress.done();
+				// });
+				this.$axios({
+					methods:"get",
+					url:"/api//Manager/findAllmanager",
+				}).then(res =>{
+					console.log(res);
+					console.log(res.data.data);
+					var list = res.data.data;
+					console.log(list[0].adminName);
+					this.users = list;
+				})
+						.catch(err =>{
+							console.log(err);
+						})
 			},
 			//删除
 			handleDel: function (index, row) {

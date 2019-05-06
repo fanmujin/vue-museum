@@ -9,11 +9,11 @@
 			>
 			</el-input>
 			</div></el-col>
-			<el-col :span="2"><div><el-button type="primary" icon="el-icon-search">搜索</el-button></div></el-col>
+			<el-col :span="2"><div><el-button type="primary" icon="el-icon-search" @click="find">搜索</el-button></div></el-col>
 		</el-row>
 		<el-row >
 			<div style="text-align: left">
-				<el-button type="primary" icon="el-icon-search">查询</el-button>
+				<el-button type="primary" icon="el-icon-search" @click="get">查询</el-button>
 				<el-button type="success" icon="el-icon-edit">修改</el-button>
 				<el-button type="danger" icon="el-icon-delete">删除</el-button>
 			</div>
@@ -32,21 +32,30 @@
 							fixed
 							prop="id"
 							label="ID"
-							width="80">
+							width="120">
 					</el-table-column>
 					<el-table-column
-							prop="title"
-							label="通知标题"
+							prop="reportName"
+							label="报告名称"
 							width="180">
 					</el-table-column>
 					<el-table-column
-							prop="content"
-							label="通知内容"
+							prop="reportAuthor"
+							label="报告作者"
 							width="80">
 					</el-table-column>
 					<el-table-column
+							prop="reportTime"
+							label="报告时间"
+							width="120">
+					</el-table-column>
+					<el-table-column
+							prop="reportContent"
+							label="报告内容">
+					</el-table-column>
+					<el-table-column
 							prop="createTime"
-							label="创建时间"
+							label="修改时间"
 							width="120">
 					</el-table-column>
 					<el-table-column
@@ -56,13 +65,11 @@
 					</el-table-column>
 					<el-table-column
 							prop="createUser"
-							label="创建人"
-							width="120">
+							label="创建人">
 					</el-table-column>
 					<el-table-column
 							prop="updateUser"
-							label="修改人"
-							width="120">
+							label="修改人">
 					</el-table-column>
 					<el-table-column
 							fixed="right"
@@ -83,19 +90,50 @@
 	</div>
 </template>
 <script>
+	import Axios from 'axios'
 	export default {
 		data(){
 			return{
 				input: '',
 				tableData: [{
 					id: '1',
-					title: '牡丹',
-					content:'名植',
+					reportName: '牡丹',
+					reportAuthor: '谢灵运',
+					reportTime: '2016-01-23',
+					reportContent: '关于',
 					createTime: '2019-03-18',
 					updateTime: '2019-04-18',
 					createUser:'王小虎',
 					updateUser:'Admin'
-				}]
+				}
+				]
+			}
+		},
+		created(){
+			find();
+		},
+		methods:{
+			find(){
+				var instance = Axios.create({
+					headers: {'content-type': 'application/x-www-form-urlencoded'}
+				})
+				instance.get('/api/institutions/getAllInstitution').then(res =>
+						{
+							console.log(res.data);
+						}
+				)
+				// var that = this;
+				// that.$axios({
+                //     methods:"get",
+				// 	//接口地址
+				// 	url:"http://localhost:8080/institutions/getAllInstitution/institutions/getAllInstitution"
+				// }).then(res =>{
+				// 	console.log(res.data);
+				//
+				// })
+			},
+			get:function () {
+				alert("success")
 			}
 		}
 	}
