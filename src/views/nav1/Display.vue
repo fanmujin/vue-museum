@@ -4,10 +4,10 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.name" placeholder="展览名称"></el-input>
+                    <el-input v-model="filters.id" placeholder="展览编号"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" v-on:click="getUsers">查询</el-button>
+                    <el-button type="primary" v-on:click="getDisplayById">查询</el-button>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="handleAdd">新增</el-button>
@@ -16,20 +16,20 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+        <el-table :data="diaplays" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
             <el-table-column type="selection" width="55">
             </el-table-column>
-            <el-table-column type="index" width="60">
+            <el-table-column prop="id" label="编号" width="100" sortable>
             </el-table-column>
-            <el-table-column prop="name" label="展览名称" width="120" sortable>
+            <el-table-column prop="displayTitle" label="展览名称" width="190" sortable>
             </el-table-column>
-            <el-table-column prop="sex" label="开始时间" width="120" :formatter="formatSex" sortable>
+            <el-table-column prop="diapalyStartdate" label="开始时间" width="180" sortable>
             </el-table-column>
-            <el-table-column prop="age" label="结束时间" width="120" sortable>
+            <el-table-column prop="displayEnddate" label="结束时间" width="180" sortable>
             </el-table-column>
-            <el-table-column prop="birth" label="展览项目" width="180" sortable>
+            <el-table-column prop="desc" label="展览项目" width="180" sortable >{{list}}
             </el-table-column>
-            <el-table-column prop="addr" label="主办方" min-width="120" sortable>
+            <el-table-column prop="resource" label="主办方" min-width="120" sortable>河南非遗网
             </el-table-column>
             <el-table-column label="操作" width="150">
                 <template scope="scope">
@@ -49,22 +49,30 @@
         <!--编辑界面-->
         <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-                <el-form-item label="展览名称" prop="name">
-                    <el-input v-model="editForm.name" auto-complete="off"></el-input>
+                <el-form-item label="ID">
+                    <el-input v-model="editForm.id" auto-complete="off" :disabled="true"></el-input>
                 </el-form-item>
-                <el-form-item label="开始时间">
-                    <el-radio-group v-model="editForm.sex">
-                        <el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
-                    </el-radio-group>
+                <el-form-item label="展览名称" prop="displayTitle">
+                    <el-input v-model="editForm.displayTitle" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="结束时间">
-                    <el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
-                </el-form-item>
-                <el-form-item label="展览项目">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
+                <el-form-item label="展览时间">
+                    <el-col :span="11">
+                        <el-date-picker
+                                v-model="editForm.diapalyStartdate" type="datetime" placeholder="选择日期时间">
+                        </el-date-picker>
+                    </el-col>
+                    <el-col class="line" :span="2">至</el-col>
+                    <el-col :span="11">
+                        <el-date-picker
+                                v-model="editForm.displayEnddate" type="datetime" placeholder="选择日期时间">
+                        </el-date-picker>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="主办方">
-                    <el-input type="textarea" v-model="editForm.addr"></el-input>
+                    <el-input  v-model="editForm.resource" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="会展内容">
+                    <el-input type="textarea" v-model="editForm.desc"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -111,9 +119,12 @@
         data() {
             return {
                 filters: {
-                    name: ''
+                    id: ''
                 },
-                users: [],
+                diaplays: [],
+                list:'凤翔泥塑、刀书画、桃符手工、木板彩烙、拓片、亿凡浮雕、布艺口金包、' +
+                    '葫芦烙画、白手篆刻、锦玉麦草画、中国结艺、动物标本制作、吹糖人、木版年画、' +
+                    '手工纸雕、依山堂钧窑项目',
                 total: 0,
                 page: 1,
                 listLoading: false,
@@ -122,18 +133,18 @@
                 editFormVisible: false,//编辑界面是否显示
                 editLoading: false,
                 editFormRules: {
-                    name: [
+                    displayTitle: [
                         { required: true, message: '请输入姓名', trigger: 'blur' }
                     ]
                 },
                 //编辑界面数据
                 editForm: {
-                    id: 0,
-                    name: '',
-                    sex: -1,
-                    age: 0,
-                    birth: '',
-                    addr: ''
+                    id: "",
+                    displayTitle: '',
+                    diapalyStartdate: '',
+                    displayEnddate: '',
+                    resource: '',
+                    desc:''
                 },
 
                 addFormVisible: false,//新增界面是否显示
@@ -163,17 +174,45 @@
                 this.page = val;
                 this.getUsers();
             },
-            //获取用户列表
-            getUsers() {
+            //获取展览列表
+            getDisplay() {
                 let para = {
                     page: this.page,
-                    name: this.filters.name
+                    id: this.filters.id,
                 };
                 this.listLoading = true;
                 //NProgress.start();
-                getUserListPage(para).then((res) => {
-                    this.total = res.data.total;
-                    this.users = res.data.users;
+                this.$axios({
+                    methods:"get",
+                    url:"/api/dispaly/findAllDisplay",
+                }).then((res) => {
+                    //this.total = res.data.total;
+                    this.diaplays = res.data.data;
+                    this.listLoading = false;
+                    //NProgress.done();
+                });
+            },
+            //通过id获得Display
+            getDisplayById(){
+                let para = {
+                    page: this.page,
+                    id: this.filters.id,
+                };
+                this.listLoading = true;
+                //NProgress.start();
+                this.$axios({
+                    methods:"get",
+                    url:"/api/dispaly/findDisplayById",
+                    params:{
+                        id:para.id
+                    }
+                }).then((res) => {
+                    //this.total = res.data.total;
+                    console.log(res);
+                    console.log(res.data.data);
+                    var list = [];
+                    list[0] = res.data.data;
+                    this.diaplays = list;
                     this.listLoading = false;
                     //NProgress.done();
                 });
@@ -186,14 +225,20 @@
                     this.listLoading = true;
                     //NProgress.start();
                     let para = { id: row.id };
-                    removeUser(para).then((res) => {
+                    this.$axios({
+                        method:"delete",
+                        url: "/api/dispaly/deleteById",
+                        params:{
+                            id:para.id
+                        }
+                    }).then((res) => {
                         this.listLoading = false;
                         //NProgress.done();
                         this.$message({
                             message: '删除成功',
                             type: 'success'
                         });
-                        this.getUsers();
+                        this.getDisplay();
                     });
                 }).catch(() => {
 
@@ -223,8 +268,20 @@
                             this.editLoading = true;
                             //NProgress.start();
                             let para = Object.assign({}, this.editForm);
-                            para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-                            editUser(para).then((res) => {
+                            para.diapalyStartdate = (!para.diapalyStartdate || para.diapalyStartdate == '') ? '' : util.formatDate.format(new Date(para.diapalyStartdate), 'yyyy-MM-dd hh:mm:ss');
+                            para.displayEnddate = (!para.displayEnddate || para.displayEnddate == '') ? '' : util.formatDate.format(new Date(para.displayEnddate), 'yyyy-MM-dd hh:mm:ss');
+                            console.log("start"+para.diapalyStartdate);
+                            this.$axios({
+                                method:"post",
+                                url:"/api/dispaly/updateDisplay",
+                                params: {
+                                    id:para.id,
+                                    displayTitle:para.displayTitle,
+                                    start : para.diapalyStartdate,
+                                    end : para.displayEnddate,
+                                    displayContend : para.desc
+                                }
+                            }).then((res) => {
                                 this.editLoading = false;
                                 //NProgress.done();
                                 this.$message({
@@ -233,7 +290,7 @@
                                 });
                                 this.$refs['editForm'].resetFields();
                                 this.editFormVisible = false;
-                                this.getUsers();
+                                this.getDisplay();
                             });
                         });
                     }
@@ -290,7 +347,7 @@
             }
         },
         mounted() {
-            this.getUsers();
+            this.getDisplay();
         }
     }
 
