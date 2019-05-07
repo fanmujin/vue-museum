@@ -224,7 +224,13 @@
 					this.listLoading = true;
 					//NProgress.start();
 					let para = { id: row.id };
-					removeUser(para).then((res) => {
+					this.$axios({
+						method:"delete",
+						url: "/api/Manager/deleteByPrimaryKey",
+						params:{
+							id:para.id
+						}
+					}).then((res) => {
 						this.listLoading = false;
 						//NProgress.done();
 						this.$message({
