@@ -54,7 +54,7 @@
            // requestLogin(loginParams).then(data => {
             this.$axios({
               method: "post",
-              url:"http://localhost:8080/Manager/doLogin",
+              url:"/api/Manager/doLogin",
               params:{
                    name:loginParams.username,
                    password:loginParams.password

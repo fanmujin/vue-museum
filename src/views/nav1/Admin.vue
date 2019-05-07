@@ -7,7 +7,7 @@
 					<el-input v-model="filters.name" placeholder="姓名"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
+					<el-button type="primary" v-on:click="getUserByname">查询</el-button>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="handleAdd">新增</el-button>
@@ -18,17 +18,19 @@
 		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
-			<el-table-column type="index" width="60">
+			<!--<el-table-column type="index" width="60">-->
+			<!--</el-table-column>-->
+			<el-table-column prop="id" label="编号" width="100" sortable>
 			</el-table-column>
 			<el-table-column prop="adminName" label="姓名" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
+			<el-table-column prop="adminEmail" label="邮箱" width="150" sortable>
 			</el-table-column>
-			<el-table-column prop="age" label="年龄" width="100" sortable>
+			<el-table-column prop="adminTel" label="联系方式" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="birth" label="生日" width="120" sortable>
+			<el-table-column prop="createTime" label="创建时间" min-width="150" sortable>
 			</el-table-column>
-			<el-table-column prop="addr" label="地址" min-width="180" sortable>
+			<el-table-column prop="updateTime" label="修改时间" min-width="150" sortable>
 			</el-table-column>
 			<el-table-column label="操作" width="150">
 				<template scope="scope">
@@ -48,24 +50,40 @@
 		<!--编辑界面-->
 		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="姓名" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+				<el-form-item label="ID">
+					<el-input v-model="editForm.id" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="性别">
-					<el-radio-group v-model="editForm.sex">
-						<el-radio class="radio" :label="1">男</el-radio>
-						<el-radio class="radio" :label="0">女</el-radio>
-					</el-radio-group>
+				<el-form-item label="姓名">
+					<el-input v-model="editForm.adminName" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="年龄">
-					<el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
+				<el-form-item label="邮箱">
+					<el-input v-model="editForm.adminEmail" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="生日">
-					<el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
+				<el-form-item label="联系方式">
+					<el-input v-model="editForm.adminTel" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="地址">
-					<el-input type="textarea" v-model="editForm.addr"></el-input>
+				<el-form-item label="创建时间">
+					<el-input v-model="editForm.createTime" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
+				<el-form-item label="更新时间">
+					<el-input v-model="editForm.updateTime" auto-complete="off" :disabled="true"></el-input>
+				</el-form-item>
+
+				<!--<el-form-item label="性别">-->
+					<!--<el-radio-group v-model="editForm.sex">-->
+						<!--<el-radio class="radio" :label="1">男</el-radio>-->
+						<!--<el-radio class="radio" :label="0">女</el-radio>-->
+					<!--</el-radio-group>-->
+				<!--</el-form-item>-->
+				<!--<el-form-item label="年龄">-->
+					<!--<el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>-->
+				<!--</el-form-item>-->
+				<!--<el-form-item label="生日">-->
+					<!--<el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>-->
+				<!--</el-form-item>-->
+				<!--<el-form-item label="地址">-->
+					<!--<el-input type="textarea" v-model="editForm.addr"></el-input>-->
+				<!--</el-form-item>-->
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="editFormVisible = false">取消</el-button>
@@ -129,14 +147,13 @@
 				},
 				//编辑界面数据
 				editForm: {
-					id: 0,
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
+					id:"",
+					adminName:'',
+			        adminEmail:'',
+			        adminTel:'',
+					createTime:'',
+				    updateTime:''
 				},
-
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
 				addFormRules: {
@@ -146,6 +163,7 @@
 				},
 				//新增界面数据
 				addForm: {
+					id:'',
 					name: '',
 					sex: -1,
 					age: 0,
@@ -166,21 +184,9 @@
 			},
 			//获取用户列表
 			getUsers() {
-				// let para = {
-				// 	page: this.page,
-				// 	name: this.filters.name
-				// };
-				// this.listLoading = true;
-				// //NProgress.start();
-				// getUserListPage(para).then((res) => {
-				// 	this.total = res.data.total;
-				// 	this.users = res.data.users;
-				// 	this.listLoading = false;
-				// 	//NProgress.done();
-				// });
 				this.$axios({
 					methods:"get",
-					url:"/api//Manager/findAllmanager",
+					url:"/api/Manager/findAllmanager",
 				}).then(res =>{
 					console.log(res);
 					console.log(res.data.data);
@@ -191,6 +197,24 @@
 						.catch(err =>{
 							console.log(err);
 						})
+			},
+			//通过名字查询
+			getUserByname:function(){
+                 var searchName = {name:this.filters.name};
+                 console.log("search="+searchName);
+                 this.$axios({
+					 method:"post",
+					 url: "/api/Manager/findByName",
+					 params:{
+					 	name:searchName.name
+					 }
+				 }).then(res =>{
+					 var list = res.data.data;
+					 this.users = list;
+				 })
+						 .catch(error => {
+						 	console.log(error);
+						 })
 			},
 			//删除
 			handleDel: function (index, row) {
@@ -217,6 +241,7 @@
 			handleEdit: function (index, row) {
 				this.editFormVisible = true;
 				this.editForm = Object.assign({}, row);
+				console.log("editForm"+this.editForm);
 			},
 			//显示新增界面
 			handleAdd: function () {
@@ -237,14 +262,30 @@
 							this.editLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
+							console.log("para"+para);
+							para.createTime = (!para.createTime || para.createTime == '') ? '' : util.formatDate.format(new Date(para.createTime), 'yyyy-MM-dd hh:mm:ss');
+							para.updateTime = (!para.updateTime || para.updateTime == '') ? '' : util.formatDate.format(new Date(para.updateTime), 'yyyy-MM-dd hh:mm:ss');
+							console.log("para.createTime"+para.createTime);
+							this.$axios({
+								method:"post",
+								url:"/api/Manager/updateById",
+								 params: {
+									id: para.id,
+									adminName: para.adminName,
+									adminEmail: para.adminEmail,
+									adminTel: para.adminTel,
+									 cdate:para.createTime,
+									 // updateTime:para.updateTime
+								}
+							}).then((res) => {
 								this.editLoading = false;
+
 								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
+								// this.$message({
+								// 	message: '提交成功',
+								// 	type: 'success'
+								// });
+								console.log("res"+res);
 								this.$refs['editForm'].resetFields();
 								this.editFormVisible = false;
 								this.getUsers();

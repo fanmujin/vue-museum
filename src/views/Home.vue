@@ -78,7 +78,7 @@
 				sysName:'MUSEUM',
 				collapsed:false,
 				sysUserName: '',
-				sysUserAvatar: '../assets/user.png',
+				sysUserAvatar: require('../assets/user.png'),
 				form: {
 					name: '',
 					region: '',
