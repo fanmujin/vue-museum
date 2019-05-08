@@ -254,7 +254,6 @@
 							let para = Object.assign({}, this.editForm);
 							console.log("para"+para);
 							para.createTime = (!para.createTime || para.createTime == '') ? '' : util.formatDate.format(new Date(para.createTime), 'yyyy-MM-dd hh:mm:ss');
-							para.updateTime = (!para.updateTime || para.updateTime == '') ? '' : util.formatDate.format(new Date(para.updateTime), 'yyyy-MM-dd hh:mm:ss');
 							console.log("para.createTime"+para.createTime);
 							this.$axios({
 								method:"post",
@@ -265,16 +264,14 @@
 									adminEmail: para.adminEmail,
 									adminTel: para.adminTel,
 									 cdate:para.createTime,
-									 // updateTime:para.updateTime
 								}
 							}).then((res) => {
 								this.editLoading = false;
-
 								//NProgress.done();
-								// this.$message({
-								// 	message: '提交成功',
-								// 	type: 'success'
-								// });
+								this.$message({
+									message: '提交成功',
+									type: 'success'
+								});
 								console.log("res"+res);
 								this.$refs['editForm'].resetFields();
 								this.editFormVisible = false;

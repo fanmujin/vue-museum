@@ -12,7 +12,7 @@ import Page6 from './views/nav2/Page6.vue'
 import Page7 from './views/nav3/Page7.vue'
 import echarts from './views/charts/echarts.vue'
 import addressChart from './views/charts/address-chart.vue'
-import address from './views/charts/address.vue'
+import address from './views/nav4/address.vue'
 let routes = [
     {
         path: '/login',

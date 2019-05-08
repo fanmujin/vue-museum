@@ -2,34 +2,31 @@
     <section>
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-            <el-form :inline="true" :model="filters">
-                <el-form-item>
-                    <el-input v-model="filters.id" placeholder="名俗编号"></el-input>
+            <el-form :inline="true" :model="filters" :rules="SerchRules">
+                <el-form-item prop="name">
+                    <el-input v-model="filters.name" placeholder="地理名称"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" v-on:click="getCultureById">查询</el-button>
+                    <el-button type="primary" v-on:click="getAddressByname">查询</el-button>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="handleAdd">新增</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
-
         <!--列表-->
-        <el-table :data="cultures" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+        <el-table :data="address" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column prop="id" label="编号" width="100" sortable>
             </el-table-column>
-            <el-table-column prop="cultureName" label="名称" width="190" sortable>
+            <el-table-column prop="addressName" label="名称" width="100" sortable>
             </el-table-column>
-            <el-table-column prop="cultureLevel" label="级别" width="180" sortable>
-            </el-table-column>
-            <el-table-column prop="address.addressName" label="收录地址" width="180" sortable>
-            </el-table-column>
-            <el-table-column prop="typee.typeName" label="类别" width="180" sortable >
+            <el-table-column prop="addressPicture" label="地点介绍" width="250" sortable>
             </el-table-column>
             <el-table-column prop="createTime" label="收录时间" min-width="120" sortable>
+            </el-table-column>
+            <el-table-column prop="updateTime" label="修改时间" min-width="120" sortable>
             </el-table-column>
             <el-table-column label="操作" width="150">
                 <template scope="scope">
@@ -52,24 +49,17 @@
                 <el-form-item label="ID">
                     <el-input v-model="editForm.id" auto-complete="off" :disabled="true"></el-input>
                 </el-form-item>
-                <el-form-item label="名称" prop="cultureName">
-                    <el-input v-model="editForm.cultureName" auto-complete="off"></el-input>
+                <el-form-item label="名称" prop="reportName">
+                    <el-input v-model="editForm.addressName" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="级别" >
-                    <el-input v-model="editForm.cultureLevel" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="收录地址" >
-                    <el-input v-model="editForm.address.addressName" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="类别" >
-                    <el-input v-model="editForm.typee.typeName" auto-complete="off"></el-input>
+                <el-form-item label="地点介绍">
+                    <el-input v-model="editForm.addressPicture" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="收录时间">
-                    <el-col :span="11">
-                        <el-date-picker
-                                v-model="editForm.createTime" type="datetime" placeholder="选择日期时间">
-                        </el-date-picker>
-                    </el-col>
+                    <el-input v-model="editForm.createTime" auto-complete="off" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="更新时间">
+                    <el-input v-model="editForm.updateTime" auto-complete="off" :disabled="true"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -81,24 +71,11 @@
         <!--新增界面-->
         <el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
             <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-                <el-form-item label="名称" prop="cultureName">
-                    <el-input v-model="addForm.cultureName" auto-complete="off"></el-input>
+                <el-form-item label="地点名称" prop="addressName">
+                    <el-input  v-model="addForm.addressName" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="级别" >
-                    <el-input v-model="addForm.cultureLevel" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="收录地址">
-                    <el-input v-model="addForm.addressName" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="类别">
-                    <el-input v-model="addForm.typeName" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="收录时间">
-                    <el-col :span="11">
-                        <el-date-picker
-                                v-model="addForm.createTime" type="datetime" placeholder="选择日期时间">
-                        </el-date-picker>
-                    </el-col>
+                <el-form-item label="地点介绍">
+                    <el-input  v-model="addForm.addressPicture" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -118,50 +95,44 @@
         data() {
             return {
                 filters: {
-                    id: ''
+                    name: ''
                 },
-                cultures: [],
+                address: [],
                 total: 0,
                 page: 1,
                 listLoading: false,
                 sels: [],//列表选中列
-
                 editFormVisible: false,//编辑界面是否显示
                 editLoading: false,
+                SerchRules:{
+                    name:[
+                        { required: true, message: '请输入地点', trigger: 'blur'}
+                    ]
+                },
                 editFormRules: {
-                    cultureName: [
-                        { required: true, message: '请输入姓名', trigger: 'blur' }
+                    addressName: [
+                        { required: true, message: '请输入地点', trigger: 'blur' }
                     ]
                 },
                 //编辑界面数据
                 editForm: {
-                    id: "",
-                    cultureName: '',
-                    cultureLevel: '',
-                    address:{
-                        addressName:'',
-                    },
-                    typee:{
-                        typeName: '',
-                    }
-                   ,
-                    createTime:''
+                    id:"",
+                    addressName:'',
+                    addressPicture:'',
+                    createTime:'',
+                    updateTime:''
                 },
-
                 addFormVisible: false,//新增界面是否显示
                 addLoading: false,
                 addFormRules: {
-                    cultureName: [
-                        { required: true, message: '请输入名称', trigger: 'blur' }
+                    addressName: [
+                        { required: true, message: '请输入学术报告名称', trigger: 'blur' }
                     ]
                 },
                 //新增界面数据
                 addForm: {
-                    cultureName: '',
-                    cultureLevel: '',
-                    addressName: '',
-                    typeName: '',
-                    createTime:''
+                    addressName:'',
+                    addressPicture:''
                 }
 
             }
@@ -175,48 +146,23 @@
                 this.page = val;
                 this.getUsers();
             },
-            //获取展览列表
-            getCulture() {
-                let para = {
-                    page: this.page,
-                    id: this.filters.id,
-                };
-                this.listLoading = true;
-                //NProgress.start();
+            //获取展厅列表
+            getAddressByname() {
+                var searchName = {name:this.filters.name};
                 this.$axios({
                     methods:"get",
-                    url:"/api/culture/findAllCulture",
-                }).then((res) => {
-                    //this.total = res.data.total;
-                    this.cultures = res.data.data;
-                    this.listLoading = false;
-                    //NProgress.done();
-                });
-            },
-            //通过id获得Display
-            getCultureById(){
-                let para = {
-                    page: this.page,
-                    id: this.filters.id,
-                };
-                this.listLoading = true;
-                //NProgress.start();
-                this.$axios({
-                    methods:"get",
-                    url:"/api/culture/findCultureById",
+                    url:"/api/Address/findByName",
                     params:{
-                        id:para.id
+                        name:searchName.name
                     }
-                }).then((res) => {
-                    //this.total = res.data.total;
+                }).then(res =>{
                     console.log(res);
                     console.log(res.data.data);
-                    var list = [];
-                    list[0] = res.data.data;
-                    this.cultures = list;
-                    this.listLoading = false;
-                    //NProgress.done();
-                });
+                    var list = res.data.data;
+                    this.address = list;
+                }).catch(err =>{
+                    console.log(err);
+                })
             },
             //删除
             handleDel: function (index, row) {
@@ -228,7 +174,7 @@
                     let para = { id: row.id };
                     this.$axios({
                         method:"delete",
-                        url: "/api/culture/deleteById",
+                        url: "/api/Address/deleteById",
                         params:{
                             id:para.id
                         }
@@ -239,7 +185,7 @@
                             message: '删除成功',
                             type: 'success'
                         });
-                        this.getCulture();
+                        this.getAddressByname();
                     });
                 }).catch(() => {
 
@@ -249,16 +195,14 @@
             handleEdit: function (index, row) {
                 this.editFormVisible = true;
                 this.editForm = Object.assign({}, row);
+                console.log("editForm"+this.editForm);
             },
             //显示新增界面
             handleAdd: function () {
                 this.addFormVisible = true;
                 this.addForm = {
-                    name: '',
-                    sex: -1,
-                    age: 0,
-                    birth: '',
-                    addr: ''
+                    addressName:'',
+                    addressPicture:''
                 };
             },
             //编辑
@@ -269,17 +213,16 @@
                             this.editLoading = true;
                             //NProgress.start();
                             let para = Object.assign({}, this.editForm);
-                            para.diapalyStartdate = (!para.diapalyStartdate || para.diapalyStartdate == '') ? '' : util.formatDate.format(new Date(para.diapalyStartdate), 'yyyy-MM-dd hh:mm:ss');
-                            para.displayEnddate = (!para.displayEnddate || para.displayEnddate == '') ? '' : util.formatDate.format(new Date(para.displayEnddate), 'yyyy-MM-dd hh:mm:ss');
+                            console.log("para"+para);
+                            para.createTime = (!para.createTime || para.createTime == '') ? '' : util.formatDate.format(new Date(para.createTime), 'yyyy-MM-dd hh:mm:ss');
                             this.$axios({
                                 method:"post",
-                                url:"/api/culture/saveOrupdateCulture",
+                                url:"/api/Address/updateAddress",
                                 params: {
-                                    id:para.id,
-                                    displayTitle:para.displayTitle,
-                                    start : para.diapalyStartdate,
-                                    end : para.displayEnddate,
-                                    displayContend : para.desc
+                                    id: para.id,
+                                    addressName: para.addressName,
+                                    addressPicture: para.addressPicture,
+                                    creat:para.createTime
                                 }
                             }).then((res) => {
                                 this.editLoading = false;
@@ -288,9 +231,10 @@
                                     message: '提交成功',
                                     type: 'success'
                                 });
+                                console.log("res"+res);
                                 this.$refs['editForm'].resetFields();
                                 this.editFormVisible = false;
-                                this.getCulture();
+                                this.getAddressByname();
                             });
                         });
                     }
@@ -303,9 +247,16 @@
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.addLoading = true;
                             //NProgress.start();
-                            let para = Object.assign({}, this.addForm);
-                            para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-                            addUser(para).then((res) => {
+                            let para = {addressName:this.addForm.addressName,addressPicture:this.addForm.addressPicture};
+                            //para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
+                            this.$axios({
+                                method:"post",
+                                url:"/api/Address/saveAddress",
+                                params: {
+                                    addressName:para.addressName,
+                                    addressPicture:para.addressPicture
+                                }
+                            }).then((res) => {
                                 this.addLoading = false;
                                 //NProgress.done();
                                 this.$message({
@@ -314,7 +265,7 @@
                                 });
                                 this.$refs['addForm'].resetFields();
                                 this.addFormVisible = false;
-                                this.getCulture();
+                                this.getAddressByname();
                             });
                         });
                     }
@@ -339,7 +290,7 @@
                             message: '删除成功',
                             type: 'success'
                         });
-                        this.getCulture();
+                        this.getNotify();
                     });
                 }).catch(() => {
 
@@ -347,11 +298,12 @@
             }
         },
         mounted() {
-            this.getCulture();
+            this.getAddressByname();
         }
     }
 
 </script>
 
 <style scoped>
-    </style>
+
+</style>
