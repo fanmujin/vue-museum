@@ -269,12 +269,11 @@
 								}
 							}).then((res) => {
 								this.editLoading = false;
-
 								//NProgress.done();
-								// this.$message({
-								// 	message: '提交成功',
-								// 	type: 'success'
-								// });
+								this.$message({
+									message: '提交成功',
+									type: 'success'
+								});
 								console.log("res"+res);
 								this.$refs['editForm'].resetFields();
 								this.editFormVisible = false;
