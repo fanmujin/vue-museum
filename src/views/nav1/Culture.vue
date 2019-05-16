@@ -304,7 +304,7 @@
                             this.addLoading = true;
                             //NProgress.start();
                             let para = Object.assign({}, this.addForm);
-                            para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
+                            //para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
                             addUser(para).then((res) => {
                                 this.addLoading = false;
                                 //NProgress.done();
