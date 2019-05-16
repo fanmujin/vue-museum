@@ -27,9 +27,9 @@
             </el-table-column>
             <el-table-column prop="displayEnddate" label="结束时间" width="180" sortable>
             </el-table-column>
-            <el-table-column prop="desc" label="展览项目" width="180" sortable >{{list}}
+            <el-table-column prop="createUser" label="展览项目" width="180" sortable >
             </el-table-column>
-            <el-table-column prop="resource" label="主办方" min-width="120" sortable>河南非遗网
+            <el-table-column prop="updateUser" label="主办方" min-width="120" sortable>
             </el-table-column>
             <el-table-column label="操作" width="150">
                 <template scope="scope">
@@ -69,10 +69,10 @@
                     </el-col>
                 </el-form-item>
                 <el-form-item label="主办方">
-                    <el-input  v-model="editForm.resource" auto-complete="off"></el-input>
+                    <el-input  v-model="editForm.updateUser" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="会展内容">
-                    <el-input type="textarea" v-model="editForm.desc"></el-input>
+                    <el-input type="textarea" v-model="editForm.createUser"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -122,9 +122,6 @@
                     id: ''
                 },
                 diaplays: [],
-                list:'凤翔泥塑、刀书画、桃符手工、木板彩烙、拓片、亿凡浮雕、布艺口金包、' +
-                    '葫芦烙画、白手篆刻、锦玉麦草画、中国结艺、动物标本制作、吹糖人、木版年画、' +
-                    '手工纸雕、依山堂钧窑项目',
                 total: 0,
                 page: 1,
                 listLoading: false,
@@ -143,8 +140,8 @@
                     displayTitle: '',
                     diapalyStartdate: '',
                     displayEnddate: '',
-                    resource: '',
-                    desc:''
+                    updateUser: '',
+                    createUser:''
                 },
 
                 addFormVisible: false,//新增界面是否显示
@@ -279,7 +276,8 @@
                                     displayTitle:para.displayTitle,
                                     start : para.diapalyStartdate,
                                     end : para.displayEnddate,
-                                    displayContend : para.desc
+                                    updateUser:para.updateUser,
+                                    createUser : para.createUser
                                 }
                             }).then((res) => {
                                 this.editLoading = false;

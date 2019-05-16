@@ -1,6 +1,6 @@
 <template>
-	<el-form ref="form" :model="form1" label-width="80px" @submit.prevent="onSubmit" style="margin:20px;width:60%;min-width:600px;">
-		<el-form-item label="展览名称">
+	<el-form ref="form" :model="form1" label-width="80px" @submit.prevent="onSubmit" :rules="addFormRules" style="margin:20px;width:60%;min-width:600px;">
+		<el-form-item label="展览名称" prop="name">
 			<el-input v-model="form1.name"></el-input>
 		</el-form-item>
 		<el-form-item label="展厅">
@@ -34,13 +34,13 @@
 			</el-checkbox-group>
 		</el-form-item>
 		<el-form-item label="主办单位">
-			<el-radio-group v-model="form1.resource">
+			<el-radio-group v-model="form1.updateUser">
 				<el-radio label="河南非遗文创联盟"></el-radio>
 				<el-radio label="河南非物质文化遗产网"></el-radio>
 			</el-radio-group>
 		</el-form-item>
 		<el-form-item label="会展内容">
-			<el-input type="textarea" v-model="form1.desc"></el-input>
+			<el-input type="textarea" v-model="form1.createUser"></el-input>
 		</el-form-item>
 		<el-form-item>
 			<el-button type="primary" @click="createDiaplay">立即创建</el-button>
@@ -61,62 +61,60 @@
 					date2: '',
 					delivery: false,
 					type: [],
-					resource: '',
-					desc: ''
-				}
+					updateUser: '',
+					createUser: ''
+				},
+				addFormRules: {
+					name: [
+						{ required: true, message: '请输入展览名称', trigger: 'blur' }
+					]
+				},
 			}
 		},
 		methods: {
 			onSubmit() {
 				console.log('submit!');
 			},
-			// handleReset2() {
-			// 	this.$refs.form.resetFields();
-			// },
 			createDiaplay:function () {
-			//	alert("创建成功");
 				this.$refs.form.validate((valid) => {
 					if (valid) {
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							this.addLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.form1);
-							para.date1 = (!para.date1 || para.date1 == '') ? '' : util.formatDate.format(new Date(para.date1), 'yyyy-MM-dd hh:mm:ss');
-							para.date2 = (!para.date1 || para.date2 == '') ? '' : util.formatDate.format(new Date(para.date2), 'yyyy-MM-dd hh:mm:ss');
-							console.log("para"+para.name);
-							this.$axios({
-								method:"post",
-								url:"/api/dispaly/addDisplay",
-								params:{
-									displayTitle:para.name,
-									start : para.date1,
-									end : para.date2,
-									displayContend : para.desc
-								}
-							}).then((res) => {
-								this.addLoading = false;
-								//NProgress.done();
+							if(para.date1>para.date2){
+								//判断时间是否正确
 								this.$message({
-									message: '提交成功',
-									type: 'success'
+									message: '起始时间错误',
+									type: 'error'
 								});
-								this.$refs['form'].resetFields();
-								//this.addFormVisible = false;
-								//this.getUsers();
-							});
+							}else{
+								para.date1 = (!para.date1 || para.date1 == '') ? '' : util.formatDate.format(new Date(para.date1), 'yyyy-MM-dd hh:mm:ss');
+								para.date2 = (!para.date1 || para.date2 == '') ? '' : util.formatDate.format(new Date(para.date2), 'yyyy-MM-dd hh:mm:ss');
+								console.log("para"+para.name);
+								this.$axios({
+									method:"post",
+									url:"/api/dispaly/addDisplay",
+									params:{
+										displayTitle:para.name,
+										start : para.date1,
+										end : para.date2,
+										createUser : para.createUser,
+										updateUser:para.updateUser
+									}
+								}).then((res) => {
+									this.addLoading = false;
+									//NProgress.done();
+									this.$message({
+										message: '提交成功',
+										type: 'success'
+									});
+									this.clear();
+								})
+							}
 						});
 					}
 				});
-				this.form = {
-					name: '',
-					region: '',
-					date1: '',
-					date2: '',
-					delivery: false,
-					type: [],
-					resource: '',
-					desc: ''
-				}
 			},
 			clear:function () {
 				this.form1 = {
@@ -126,8 +124,8 @@
 					date2: '',
 					delivery: false,
 					type: [],
-					resource: '',
-					desc: ''
+					updateUser: '',
+					createUser: ''
 				}
 			}
 		}
