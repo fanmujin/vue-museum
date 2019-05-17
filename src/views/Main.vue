@@ -13,7 +13,7 @@
 					<el-col :span="4"><div class="data_list all_head"><span class="data_num head">总数据：</span></div></el-col>
 					<el-col :span="4"><div class="data_list"><span class="data_num">43</span> 收录名俗</div></el-col>
 					<el-col :span="4"><div class="data_list"><span class="data_num">289</span> 访客</div></el-col>
-					<el-col :span="4"><div class="data_list"><span class="data_num">100</span> 管理员</div></el-col>
+					<el-col :span="4"><div class="data_list"><span class="data_num">27</span> 管理员</div></el-col>
 				</el-row>
 			</section>
 		</div>
