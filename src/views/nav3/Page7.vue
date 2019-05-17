@@ -220,7 +220,7 @@
 							message: '删除成功',
 							type: 'success'
 						});
-						this.getNotify();
+						this.getInstitute();
 					});
 				}).catch(() => {
 
