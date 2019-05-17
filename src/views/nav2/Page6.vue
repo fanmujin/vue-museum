@@ -55,7 +55,7 @@
                 </el-form-item>
                 <el-form-item label="视频详情" prop="videoUrl">
                     <video id="myVideo" class="video-js">
-                        <source src="http://localhost:8080//video/video-1557918351036-2.mp4"  type="video/mp4">
+                        <source src="http://localhost:8080//video/video-1558079868366-4.mp4"  type="video/mp4">
                     </video>
                     <el-input v-model="showForm.videoUrl" auto-complete="off"></el-input>
                 </el-form-item>
