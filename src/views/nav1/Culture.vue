@@ -4,7 +4,7 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.id" placeholder="名俗编号"></el-input>
+                    <el-input v-model="filters.name" placeholder="名俗编号"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-on:click="getCultureById">查询</el-button>
@@ -56,13 +56,43 @@
                     <el-input v-model="editForm.cultureName" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="级别" >
-                    <el-input v-model="editForm.cultureLevel" auto-complete="off"></el-input>
+                    <el-radio-group v-model="editForm.cultureLevel">
+                        <el-radio label="国家级非遗文化"></el-radio>
+                        <el-radio label="河南省级非遗文化"></el-radio>
+                        <el-radio label="市级非遗文化"></el-radio>
+                        <el-radio label="地方特色文化"></el-radio>
+                    </el-radio-group>
                 </el-form-item>
-                <el-form-item label="收录地址" >
-                    <el-input v-model="editForm.address.addressName" auto-complete="off"></el-input>
+                <el-form-item label="收录地址">
+                    <el-select v-model="editForm.addressId">
+                        <el-option label="郑州" value="1"></el-option>
+                        <el-option label="安阳" value="2"></el-option>
+                        <el-option label="新乡" value="3"></el-option>
+                        <el-option label="鹤壁" value="4"></el-option>
+                        <el-option label="濮阳" value="5"></el-option>
+                        <el-option label="洛阳" value="6"></el-option>
+                        <el-option label="南阳" value="7"></el-option>
+                        <el-option label="开封" value="8"></el-option>
+                        <el-option label="商丘" value="9"></el-option>
+                        <el-option label="驻马店" value="10"></el-option>
+                        <el-option label="周口" value="11"></el-option>
+                        <el-option label="三门峡" value="12"></el-option>
+                        <el-option label="焦作" value="13"></el-option>
+                        <el-option label="平顶山" value="14"></el-option>
+                        <el-option label="许昌" value="15"></el-option>
+                        <el-option label="漯河" value="16"></el-option>
+                        <el-option label="济源" value="17"></el-option>
+                        <el-option label="信阳" value="18"></el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="类别" >
-                    <el-input v-model="editForm.typee.typeName" auto-complete="off"></el-input>
+                <el-form-item label="类别">
+                    <el-select v-model="editForm.typeId">
+                        <el-option label="传统音乐" value="1"></el-option>
+                        <el-option label="传统舞蹈" value="2"></el-option>
+                        <el-option label="传统技艺" value="3"></el-option>
+                        <el-option label="传统曲艺" value="4"></el-option>
+                        <el-option label="传统风俗" value="5"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="收录时间">
                     <el-col :span="11">
@@ -84,14 +114,48 @@
                 <el-form-item label="名称" prop="cultureName">
                     <el-input v-model="addForm.cultureName" auto-complete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="文化简介">
+                    <el-input type="textarea" v-model="addForm.cultureDescription" :rows="6" placeholder="请输入文化简介"></el-input>
+                </el-form-item>
                 <el-form-item label="级别" >
-                    <el-input v-model="addForm.cultureLevel" auto-complete="off"></el-input>
+                        <el-radio-group v-model="addForm.cultureLevel">
+                            <el-radio label="国家级非遗文化"></el-radio>
+                            <el-radio label="河南省级非遗文化"></el-radio>
+                            <el-radio label="市级非遗文化"></el-radio>
+                            <el-radio label="地方特色文化"></el-radio>
+                        </el-radio-group>
+                    </el-form-item>
                 </el-form-item>
                 <el-form-item label="收录地址">
-                    <el-input v-model="addForm.addressName" auto-complete="off"></el-input>
+                    <el-select v-model="addForm.addressId" placeholder="请选择收录地址">
+                        <el-option label="郑州" value="1"></el-option>
+                        <el-option label="安阳" value="2"></el-option>
+                        <el-option label="新乡" value="3"></el-option>
+                        <el-option label="鹤壁" value="4"></el-option>
+                        <el-option label="濮阳" value="5"></el-option>
+                        <el-option label="洛阳" value="6"></el-option>
+                        <el-option label="南阳" value="7"></el-option>
+                        <el-option label="开封" value="8"></el-option>
+                        <el-option label="商丘" value="9"></el-option>
+                        <el-option label="驻马店" value="10"></el-option>
+                        <el-option label="周口" value="11"></el-option>
+                        <el-option label="三门峡" value="12"></el-option>
+                        <el-option label="焦作" value="13"></el-option>
+                        <el-option label="平顶山" value="14"></el-option>
+                        <el-option label="许昌" value="15"></el-option>
+                        <el-option label="漯河" value="16"></el-option>
+                        <el-option label="济源" value="17"></el-option>
+                        <el-option label="信阳" value="18"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="类别">
-                    <el-input v-model="addForm.typeName" auto-complete="off"></el-input>
+                    <el-select v-model="addForm.typeId" placeholder="请选择收藏品类别">
+                            <el-option label="传统音乐" value="1"></el-option>
+                            <el-option label="传统舞蹈" value="2"></el-option>
+                            <el-option label="传统技艺" value="3"></el-option>
+                            <el-option label="传统曲艺" value="4"></el-option>
+                            <el-option label="传统风俗" value="5"></el-option>
+                        </el-select>
                 </el-form-item>
                 <el-form-item label="收录时间">
                     <el-col :span="11">
@@ -112,8 +176,6 @@
 <script>
     import util from '../../common/js/util'
     //import NProgress from 'nprogress'
-    import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
-
     export default {
         data() {
             return {
@@ -138,16 +200,10 @@
                     id: "",
                     cultureName: '',
                     cultureLevel: '',
-                    address:{
-                        addressName:'',
-                    },
-                    typee:{
-                        typeName: '',
-                    }
-                   ,
+                    addressId:'',
+                    typeId:'',
                     createTime:''
                 },
-
                 addFormVisible: false,//新增界面是否显示
                 addLoading: false,
                 addFormRules: {
@@ -159,11 +215,11 @@
                 addForm: {
                     cultureName: '',
                     cultureLevel: '',
-                    addressName: '',
-                    typeName: '',
-                    createTime:''
+                    addressId: '',
+                    typeId: '',
+                    createTime:'',
+                    cultureDescription:''
                 }
-
             }
         },
         methods: {
@@ -197,26 +253,33 @@
             getCultureById(){
                 let para = {
                     page: this.page,
-                    id: this.filters.id,
+                    name: this.filters.name,
                 };
                 this.listLoading = true;
                 //NProgress.start();
-                this.$axios({
-                    methods:"get",
-                    url:"/api/culture/findCultureById",
-                    params:{
-                        id:para.id
-                    }
-                }).then((res) => {
-                    //this.total = res.data.total;
-                    console.log(res);
-                    console.log(res.data.data);
-                    var list = [];
-                    list[0] = res.data.data;
-                    this.cultures = list;
-                    this.listLoading = false;
-                    //NProgress.done();
-                });
+                if(para.name != ""){
+                    this.$axios({
+                        methods:"get",
+                        url:"/api/culture/findCultureByName",
+                        params:{
+                            name:para.name
+                        }
+                    }).then((res) => {
+                        console.log(res.data.data.id);
+                        var list = res.data.data;;
+                        this.cultures = list;
+                        this.listLoading = false;
+                    })
+                        .catch((error) => {
+                            this.$message({
+                                message: '记录不存在',
+                                type: 'error'
+                            });
+                        });
+                }else {
+                    this.getCulture();
+                }
+
             },
             //删除
             handleDel: function (index, row) {
@@ -269,17 +332,17 @@
                             this.editLoading = true;
                             //NProgress.start();
                             let para = Object.assign({}, this.editForm);
-                            para.diapalyStartdate = (!para.diapalyStartdate || para.diapalyStartdate == '') ? '' : util.formatDate.format(new Date(para.diapalyStartdate), 'yyyy-MM-dd hh:mm:ss');
-                            para.displayEnddate = (!para.displayEnddate || para.displayEnddate == '') ? '' : util.formatDate.format(new Date(para.displayEnddate), 'yyyy-MM-dd hh:mm:ss');
+                            para.createTime = (!para.createTime || para.createTime == '') ? '' : util.formatDate.format(new Date(para.createTime), 'yyyy-MM-dd hh:mm:ss');
                             this.$axios({
                                 method:"post",
                                 url:"/api/culture/saveOrupdateCulture",
                                 params: {
                                     id:para.id,
-                                    displayTitle:para.displayTitle,
-                                    start : para.diapalyStartdate,
-                                    end : para.displayEnddate,
-                                    displayContend : para.desc
+                                    cultureName: para.cultureName,
+                                    cultureLevel: para.cultureLevel,
+                                    addressId: para.addressId,
+                                    typeId: para.typeId,
+                                    creat:para.createTime
                                 }
                             }).then((res) => {
                                 this.editLoading = false;
@@ -304,8 +367,19 @@
                             this.addLoading = true;
                             //NProgress.start();
                             let para = Object.assign({}, this.addForm);
-                            //para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-                            addUser(para).then((res) => {
+                            para.createTime = (!para.createTime || para.createTime == '') ? '' : util.formatDate.format(new Date(para.createTime), 'yyyy-MM-dd hh:mm:ss');
+                            this.$axios({
+                                method:"post",
+                                url:"/api/culture/saveOrupdateCulture",
+                                params:{
+                                    cultureName: para.cultureName,
+                                    cultureLevel: para.cultureLevel,
+                                    addressId: para.addressId,
+                                    typeId: para.typeId,
+                                    cultureDescription:para.cultureDescription,
+                                    creat:para.createTime
+                                }
+                            }).then((res) => {
                                 this.addLoading = false;
                                 //NProgress.done();
                                 this.$message({
