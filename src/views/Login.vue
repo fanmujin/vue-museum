@@ -115,7 +115,7 @@
             // requestLogin(loginParams).then(data => {
             this.$axios({
               method: "post",
-              url: "/api/Manager/doLogin",
+              url: "/api/Manager/Login",
               params: {
                 name: loginParams.username,
                 password: loginParams.password
@@ -123,16 +123,17 @@
             }).then(res => {
               this.logining = false;
               //NProgress.done();
+              console.log(res.data);
               let {msg, code, data} = res.data;
-              if (code != "1") {
+              if (code == "20002") {
                 this.$message({
                   message: msg,
                   type: 'error'
                 });
               } else {
-                console.log(data.name);
-                sessionStorage.setItem('user', JSON.stringify(data.name));
+                sessionStorage.setItem('user', JSON.stringify(data.adminName));
                 this.$router.push({path: '/main'});
+
               }
             });
           } else {
